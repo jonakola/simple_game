@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: easy-game-server-dep
+  labels:
+    app: easy-game-server
+    environment: dev
+spec:
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: easy-game-server
+      environment: dev
+  template:
+    metadata:
+      labels:
+        app: easy-game-server
+        environment: dev
+    spec:
+      containers:
+      - name: easy-game-server
+        image: jonakola/random_num_1:2

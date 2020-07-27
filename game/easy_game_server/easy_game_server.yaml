@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: easy-game-server-dep
+  labels:
+    app: game
+    environment: dev
+    tier: game-server
+    type: easy
+spec:
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: game
+      environment: dev
+      tier: game-server
+      type: easy
+  template:
+    metadata:
+      labels:
+        app: game
+        environment: dev
+        tier: game-server
+        type: easy
+    spec:
+      containers:
+      - name: easy-game-server
+        image: jonakola/random_num_1:1
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 10
+          failureThreshold: 3
+        ports:
+        - name: http
+          containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: easy-game-server-svc
+  labels:
+    environment: dev
+    app: game
+    tier: game-server
+    type: easy
+spec:
+  selector:
+    app: game
+    environment: dev
+    tier: game-server
+    type: easy
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+  
+    
+              

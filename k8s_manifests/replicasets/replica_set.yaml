@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: easy-game-server-rs
+  labels:
+    app: easy-game-server
+    environment: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: easy-game-server
+      environment: dev
+  template:
+    metadata:
+      labels:
+        app: easy-game-server
+        environment: dev
+    spec:
+      containers:
+      - name: easy-game-server
+        image: jonakola/random_num_1:1

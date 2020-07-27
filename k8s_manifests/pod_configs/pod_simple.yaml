@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo
+spec:
+  containers:
+  - name: aj
+    image: jonakola/random_num_1:1
+    ports:
+    - name: http
+      containerPort: 3000

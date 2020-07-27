@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game-frontend-dep
+  labels:
+    app: game
+    environment: dev
+    tier: frontend
+spec:
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: game
+      environment: dev
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: game
+        environment: dev
+        tier: frontend
+    spec:
+      containers:
+      - name: game-frontend
+        image: jonakola/game_frontend:1
+        imagePullPolicy: Always
+        env:
+          - name: EASY_GAME_SERVER_IP
+            valueFrom:
+              configMapKeyRef:
+                name: game-env-config
+                key: game_server_1_ip
+          - name: HARD_GAME_SERVER_IP
+            valueFrom:
+              configMapKeyRef:
+                name: game-env-config
+                key: game_server_2_ip
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 10
+          failureThreshold: 3
+        ports:
+        - name: http
+          containerPort: 8000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: game-frontend-svc
+  labels:
+    environment: dev
+    app: game
+    tier: frontend
+spec:
+  selector:
+    app: game
+    environment: dev
+    tier: frontend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  type: LoadBalancer
+    
+              

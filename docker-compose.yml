@@ -1,0 +1,17 @@
+version: '3'
+services:
+  frontend:
+    build: frontend/
+    environment:
+      - EASY_GAME_SERVER_IP=http://game_1:3000
+      - HARD_GAME_SERVER_IP=http://game_2:3000
+    ports:
+      - "8000:8000"
+  game_1:
+    build: random_1/
+    ports:
+      - "8080:3000"
+  game_2:
+    build: random_2/
+    ports:
+      - "8888:3000"

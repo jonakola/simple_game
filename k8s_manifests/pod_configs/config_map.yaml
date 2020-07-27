@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: game-config-file
+data:
+  game.config: |
+    game_server_1_ip: 'gs_1'
+    game_server_2_ip: 'gs_2'
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: game-config-env
+data:
+    game_server_1_ip: 'easy-game-server-svc.default.svc.cluster.local'
+    game_server_2_ip: 'hard-game-server-svc.default.svc.cluster.local'
